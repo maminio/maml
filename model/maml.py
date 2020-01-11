@@ -4,7 +4,7 @@ import numpy as np
 import sys
 import tensorflow as tf
 
-from tensorflow.python.platform import flags
+from tensorflow import flags
 from utils import mse, xent, conv_block, normalize
 
 FLAGS = flags.FLAGS

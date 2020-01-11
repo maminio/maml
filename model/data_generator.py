@@ -90,7 +90,9 @@ class DataGenerator(object):
 
         # make list of files
         print('Generating filenames')
+        print('Duli')
         all_filenames = []
+        duli = len(folders)
         for _ in range(num_total_batches):
             sampled_character_folders = random.sample(folders, self.num_classes)
             random.shuffle(sampled_character_folders)

@@ -56,3 +56,30 @@ def mse(pred, label):
 def xent(pred, label):
     # Note - with tf version <=0.12, this loss has incorrect 2nd derivatives
     return tf.nn.softmax_cross_entropy_with_logits(logits=pred, labels=label) / FLAGS.update_batch_size
+
+
+def exp_init():
+    if FLAGS.train_update_batch_size == -1:
+        FLAGS.train_update_batch_size = FLAGS.update_batch_size
+    if FLAGS.train_update_lr == -1:
+        FLAGS.train_update_lr = FLAGS.update_lr
+
+    exp_string = 'cls_'+str(FLAGS.num_classes)+'.mbs_'+str(FLAGS.meta_batch_size) + '.ubs_' + str(FLAGS.train_update_batch_size) + '.numstep' + str(FLAGS.num_updates) + '.updatelr' + str(FLAGS.train_update_lr)
+
+    if FLAGS.num_filters != 64:
+        exp_string += 'hidden' + str(FLAGS.num_filters)
+    if FLAGS.max_pool:
+        exp_string += 'maxpool'
+    if FLAGS.stop_grad:
+        exp_string += 'stopgrad'
+
+    if FLAGS.norm == 'batch_norm':
+        exp_string += 'batchnorm'
+    elif FLAGS.norm == 'layer_norm':
+        exp_string += 'layernorm'
+    elif FLAGS.norm == 'None':
+        exp_string += 'nonorm'
+    else:
+        print('Norm setting not recognized.')
+
+    return exp_string
