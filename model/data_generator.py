@@ -6,6 +6,7 @@ import tensorflow as tf
 
 from tensorflow.python.platform import flags
 from utils import get_images
+import concurrent.futures
 
 FLAGS = flags.FLAGS
 
@@ -93,12 +94,13 @@ class DataGenerator(object):
         print('Duli')
         all_filenames = []
         duli = len(folders)
+
         for _ in range(num_total_batches):
             sampled_character_folders = random.sample(folders, self.num_classes)
             random.shuffle(sampled_character_folders)
             labels_and_images = get_images(sampled_character_folders, range(self.num_classes), nb_samples=self.num_samples_per_class, shuffle=False)
             # make sure the above isn't randomized order
-            labels = [li[0] for li in labels_and_images]
+            # labels = [li[0] for li in labels_and_images]
             filenames = [li[1] for li in labels_and_images]
             all_filenames.extend(filenames)
 
@@ -118,7 +120,7 @@ class DataGenerator(object):
             image = tf.reshape(image, [self.dim_input])
             image = tf.cast(image, tf.float32) / 255.0
             image = 1.0 - image  # invert
-        num_preprocess_threads = 1 # TODO - enable this to be set to >1
+        num_preprocess_threads = 8 # TODO - enable this to be set to >1
         min_queue_examples = 256
         examples_per_batch = self.num_classes * self.num_samples_per_class
         batch_image_size = self.batch_size  * examples_per_batch
@@ -126,7 +128,7 @@ class DataGenerator(object):
         images = tf.train.batch(
                 [image],
                 batch_size = batch_image_size,
-                num_threads=num_preprocess_threads,
+                num_threads=8,
                 capacity=min_queue_examples + 3 * batch_image_size,
                 )
         all_image_batches, all_label_batches = [], []
