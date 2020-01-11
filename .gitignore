@@ -1,0 +1,6 @@
+data
+logs
+.vscode
+.ipynb_checkpoints
+__pycache__
+spyder_crash.log
