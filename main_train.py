@@ -31,7 +31,7 @@ if(training_type == '5_way_5_shot'):
     flags.DEFINE_string('datasource', 'miniimagenet', 'sinusoid or omniglot or miniimagenet')
     flags.DEFINE_integer('metatrain_iterations', 60000, 'number of metatraining iterations.') # 15k for omniglot 
     flags.DEFINE_integer('meta_batch_size', 4, 'number of tasks sampled per meta-update')
-    flags.DEFINE_integer('update_batch_size', 5, 'number of examples used for inner gradient update (K for K-shot learning).')
+    flags.DEFINE_integer('update_batch_size', 20, 'number of examples used for inner gradient update (K for K-shot learning).')
     flags.DEFINE_float('update_lr', 0.01, 'step size alpha for inner gradient update.') # 0.1 for omniglot
     flags.DEFINE_integer('num_updates', 5, 'number of inner gradient updates during training.')
     flags.DEFINE_string('logdir', 'logs/miniimagenet5shot/', 'directory for summaries and checkpoints.')
@@ -69,7 +69,11 @@ def get_available_gpus():
 
 gpus = get_available_gpus()
 
-
+print('\n')
+print('\n')
+print('gpus',gpus)
+print('\n')
+print('\n')
 
 #################################### MAIN ####################################
 
@@ -78,7 +82,7 @@ model, data_generator = builder.construct_model()
 
 ################## TENSORFLOW SESSION INITIALIZATION ##################
 saver = loader = tf.train.Saver(tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES), max_to_keep=10)
-sess = tf.InteractiveSession()
+sess = tf.InteractiveSession(config=tf.ConfigProto(log_device_placement=False, allow_soft_placement=True))
 #######################################################################
 
 exp_string = exp_init()
