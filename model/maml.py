@@ -44,7 +44,7 @@ class MAML:
     
 
     def construct_model(self, input_tensors=None, prefix='metatrain_'):
-        with tf.device("/GPU:0"):
+        with tf.device("/GPU:3"):
 
             # a: training data for inner gradient, b: test data for meta gradient
             if input_tensors is None:
@@ -178,7 +178,7 @@ class MAML:
             return weights
 
     def forward_fc(self, inp, weights, reuse=False):
-        with tf.device("/GPU:0"):
+        with tf.device("/GPU:1"):
             hidden = normalize(tf.matmul(inp, weights['w1']) + weights['b1'], activation=tf.nn.relu, reuse=reuse, scope='0')
             for i in range(1,len(self.dim_hidden)):
                 hidden = normalize(tf.matmul(hidden, weights['w'+str(i+1)]) + weights['b'+str(i+1)], activation=tf.nn.relu, reuse=reuse, scope=str(i+1))
@@ -186,7 +186,7 @@ class MAML:
 
     def construct_conv_weights(self):
         weights = {}
-        with tf.device("/GPU:0"):
+        with tf.device("/GPU:2"):
             
             dtype = tf.float32
             conv_initializer =  tf.contrib.layers.xavier_initializer_conv2d(dtype=dtype)
@@ -214,7 +214,7 @@ class MAML:
 
     def forward_conv(self, inp, weights, reuse=False, scope=''):
          # reuse is for the normalization parameters.
-        with tf.device("/GPU:0"): 
+        with tf.device("/GPU:3"): 
             channels = self.channels
             inp = tf.reshape(inp, [-1, self.img_size, self.img_size, channels])
 
