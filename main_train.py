@@ -69,12 +69,6 @@ def get_available_gpus():
 
 gpus = get_available_gpus()
 
-print('\n')
-print('\n')
-print('gpus',gpus)
-print('\n')
-print('\n')
-
 #################################### MAIN ####################################
 
 builder = ModelBuilder()

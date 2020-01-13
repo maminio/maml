@@ -4,3 +4,4 @@ logs
 .ipynb_checkpoints
 __pycache__
 spyder_crash.log
+.DS_Store
